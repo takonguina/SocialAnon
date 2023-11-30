@@ -1,18 +1,21 @@
-CREATE TABLE IF NOT EXISTS countries(
+CREATE DATABASE mydb;
+
+\c mydb
+
+/* CREATE TABLE IF NOT EXISTS countries(
     id_country SERIAL PRIMARY KEY,
     name VARCHAR(64)
-);
+); */
 
 
 CREATE TABLE IF NOT EXISTS users(
     id_user SERIAL PRIMARY KEY,
-    id_country INT NOT NULL,
-    login VARCHAR(64) NOT NULL,
-    password VARCHAR(64) NOT NULL,
+/*     id_country INT NOT NULL, */
     email VARCHAR(320) NOT NULL,
-    emai_validated BOOLEAN NOT NULL,
-    date_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_country FOREIGN KEY(id_country) REFERENCES countries(id_country)
+    password VARCHAR(64) NOT NULL,
+    email_validated BOOLEAN NOT NULL DEFAULT FALSE,
+    date_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+/*     CONSTRAINT fk_country FOREIGN KEY(id_country) REFERENCES countries(id_country) */
 );
 
 
@@ -44,7 +47,7 @@ CREATE TABLE IF NOT EXISTS messages(
     CONSTRAINT fk_receiver FOREIGN KEY(id_receiver) REFERENCES users(id_user)
 );
 
-CREATE TABLE IF NOT EXISTS administrators (
+CREATE TABLE IF NOT EXISTS admins(
     id_admin SERIAL PRIMARY KEY,
     id_user INT NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
