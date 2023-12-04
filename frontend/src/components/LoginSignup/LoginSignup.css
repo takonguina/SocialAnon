@@ -17,16 +17,18 @@
 }
 
 .text{
+    display: flex;
     color: #000;
     font-size: 32px;
     font-weight: 600;
 }
 
 .underline{
-    width: 61px;
+    width: 30%;
     height: 6px;
     background-color: #3c009d;
     border-radius: 6px;
+    margin-top: 10px;
 }
 
 .inputs{
@@ -72,21 +74,37 @@
     cursor: pointer;
 }
 
-.submit-container{
+.action-container{
     display: flex;
     gap: 30px;
-    margin: 60px auto;
 }
-.submit{
+
+.action-button{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 220px;
+    width: 200px;
     height: 59px;
     color: #fff;
     background: #4c00b4;
     border-radius: 50px;
     font-size: 19px;
+    cursor: pointer;
+}
+
+.submit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-top: 20px;
+    width: 200px;
+    height: 59px;
+    color: #fff;
+    background: #4c00b4;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 600;
     cursor: pointer;
 }
 
