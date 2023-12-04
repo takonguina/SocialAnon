@@ -7,7 +7,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-class User(UserBase):
+class UserOut(UserBase):
     id_user: int
     email_validated: bool
     date_insert: datetime
