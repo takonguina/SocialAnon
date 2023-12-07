@@ -4,7 +4,7 @@ from datetime import datetime
 class UserBase(BaseModel):
     email: str
 
-class UserCreate(UserBase):
+class CreateUserRequest(UserBase):
     password: str
 
 class UserOut(UserBase):

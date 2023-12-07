@@ -9,7 +9,7 @@ class Country(Base):
     id_country = Column(Integer, primary_key=True, index=True)
     name = Column(String(64))
 
-class User(Base):
+class Users(Base):
     __tablename__ = "users"
 
     id_user = Column(Integer, primary_key=True, index=True)

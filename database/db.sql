@@ -38,13 +38,15 @@ CREATE TABLE IF NOT EXISTS likes(
 
 CREATE TABLE IF NOT EXISTS messages(
     id_message SERIAL PRIMARY KEY,
+    id_post INT NOT NULL,
     id_sender INT NOT NULL,
     id_receiver INT NOT NULL,
     message_text VARCHAR(1000) NOT NULL,
     date_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_read BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_sender FOREIGN KEY(id_sender) REFERENCES users(id_user),
-    CONSTRAINT fk_receiver FOREIGN KEY(id_receiver) REFERENCES users(id_user)
+    CONSTRAINT fk_receiver FOREIGN KEY(id_receiver) REFERENCES users(id_user),
+    CONSTRAINT fk_post FOREIGN KEY(id_post) REFERENCES posts(id_post)
 );
 
 CREATE TABLE IF NOT EXISTS admins(
