@@ -29,7 +29,10 @@ app.add_middleware(
 #     db_user = create_user(db=db, user=infos)
 #     return db_user
 
-@app.get("/login/")
-async def hello():
-     return {}
+
+
+
+# @app.get("/login/")
+# async def hello():
+#      return {}
 
