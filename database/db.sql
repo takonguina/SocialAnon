@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS posts(
     id_post SERIAL PRIMARY KEY,
     id_user INT NOT NULL,
     content VARCHAR(320),
-    likes_post INT,
-    date_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    likes_post INT DEFAULT 0,
+    date_insert TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_user FOREIGN KEY(id_user) REFERENCES users(id_user)
 );
 

@@ -1,7 +1,7 @@
+from .database import Base
+from datetime import datetime
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
-
-from .database import Base
 
 class Country(Base):
     __tablename__ = "countries"
@@ -18,3 +18,15 @@ class Users(Base):
     password = Column(String(64), nullable=False)
     email_validated = Column(Boolean, default=False,nullable=False)
     date_insert = Column(DateTime, server_default=func.now(), nullable=False)
+
+class Posts(Base):
+    __tablename__ = "posts"
+
+    id_post =  Column(Integer, primary_key=True, index=True)
+    id_user = Column(Integer, nullable=False)
+    content = Column(String(320), nullable=False)
+    likes_post = Column(Integer, nullable=False, default=0)
+    date_insert = Column(DateTime, nullable=False, default=datetime.utcnow())
+
+    class Config:
+        orm_mode = True

@@ -5,14 +5,15 @@ from sql_app.dependencies.session import get_db
 from sql_app.database import SessionLocal, engine
 from sql_app.schemas import UserBase, CreateUserRequest, UserOut
 from sql_app.crud import create_user
-import auth
+import routers.auth as auth
+import routers.content as content
 
 from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
 app.include_router(auth.router)
-
+app.include_router(content.router)
 origins = ["*"]
 
 app.add_middleware(
