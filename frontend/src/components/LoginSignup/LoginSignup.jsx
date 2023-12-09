@@ -9,7 +9,7 @@ import padlock_icon from '../assets/padlock_icon.png'
 const LoginSignup = () => {
 
   const [action, setAction] = useState("Sign Up");
-  const apiUrl = "http://0.0.0.0:3000/register/";
+  const apiUrl = "http://0.0.0.0:3000/auth/register/";
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

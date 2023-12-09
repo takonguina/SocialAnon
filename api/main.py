@@ -23,17 +23,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# @app.post("/register/", response_model=UserOut) #path parameter
-# async def get_register(infos: CreateUserRequest, 
-#                        db: Session = Depends(get_db)):
-#     db_user = create_user(db=db, user=infos)
-#     return db_user
-
-
-
-
-# @app.get("/login/")
-# async def hello():
-#      return {}
-

@@ -17,7 +17,7 @@ class Users(Base):
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
     email_validated = Column(Boolean, default=False,nullable=False)
-    date_insert = Column(DateTime, server_default=func.now(), nullable=False)
+    date_insert = Column(DateTime, default=func.now(), nullable=False)
 
 class Posts(Base):
     __tablename__ = "posts"
@@ -26,7 +26,7 @@ class Posts(Base):
     id_user = Column(Integer, nullable=False)
     content = Column(String(320), nullable=False)
     likes_post = Column(Integer, nullable=False, default=0)
-    date_insert = Column(DateTime, nullable=False, default=datetime.utcnow())
+    date_insert = Column(DateTime, nullable=False, default=func.now())
 
     class Config:
         orm_mode = True

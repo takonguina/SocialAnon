@@ -22,7 +22,6 @@ class UserOut(UserBase):
 
 class Post(BaseModel):
     id_post: int
-    id_user: int
     content: str
     likes_post: int
     date_insert: datetime

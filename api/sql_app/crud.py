@@ -8,7 +8,7 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.Users).filter(models.Users.email == email).first()
 
 def get_post_by_date_insert(db: Session):
-    return db.query(models.Posts).order_by(models.Posts.date_insert.desc())
+    return db.query(models.Posts).order_by(models.Posts.date_insert.desc()).all()
 
 def insert_post(db: Session, id: int, content: str):
     new_post = models.Posts(id_user=id, content=content)
