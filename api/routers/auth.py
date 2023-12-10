@@ -53,7 +53,6 @@ async def login_for_access_token(
             detail="Email not registered"
         )
 
-    print(db_user.password)
 
     check_password = verify_password(
         plain_password = form_data.password,

@@ -23,10 +23,21 @@ class Posts(Base):
     __tablename__ = "posts"
 
     id_post =  Column(Integer, primary_key=True, index=True)
-    id_user = Column(Integer, nullable=False)
+    id_user = Column(Integer, ForeignKey("users.id_user", ondelete="cascade"),nullable=False)
     content = Column(String(320), nullable=False)
     likes_post = Column(Integer, nullable=False, default=0)
     date_insert = Column(DateTime, nullable=False, default=func.now())
+    likes = relationship("Likes", cascade="all, delete")
+
+    class Config:
+        orm_mode = True
+
+class Likes(Base):
+    __tablename__ = "likes"
+
+    id_like =  Column(Integer, primary_key=True, index=True)
+    id_post = Column(Integer, ForeignKey("posts.id_post", ondelete="cascade"),nullable=False)
+    id_user = Column(Integer, ForeignKey("users.id_user", ondelete="cascade"),nullable=False)
 
     class Config:
         orm_mode = True
