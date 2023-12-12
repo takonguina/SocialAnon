@@ -76,4 +76,19 @@ def delete_post(db: Session, id_user: int, id_post: int):
     db.delete(post)
     db.commit()
     return True
+
+def send_new_message(content: str, db: Session, id_sender: int, id_post: int):
+    post = db.query(models.Posts).filter(models.Posts.id_post == id_post).first()
+    if post is None:
+        return None
+    id_receiver = post.id_user
+    if id_receiver is None:
+        return False
+    new_message = models.Message(id_post=id_post, id_sender=id_sender, id_receiver=id_receiver, message_text=content)
+    add_commit(db= db, 
+               row=new_message)
+    return True
+
+def get_all_personal_posts(db: Session, id_user: int):
+    return db.query(models.Posts).filter(models.Posts.id_user == id_user).order_by(models.Posts.date_insert.desc()).all()
     

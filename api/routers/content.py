@@ -1,5 +1,3 @@
-import os
-
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
@@ -50,7 +48,7 @@ async def new_like_post(
     elif new_like is False:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="This post doesn't exist"
+            detail="The post no longer exists"
         )
 
     return {"message: User succesfully like the post"}
@@ -73,7 +71,7 @@ async def api_unlike_post(
     elif new_unlike is False:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="This post doesn't exist"
+            detail="The post no longer exists"
         )
 
     return {"message: User succesfully unlike the post"}
@@ -87,6 +85,6 @@ async def api_delete_post(id_post: int,
     if post is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="This post doesn't exist"
+            detail="The post no longer exists"
         )
     return {"message: User succesfully delete the post"}

@@ -40,7 +40,7 @@ async def user_register(
                  )
     return {"message: User created successfully"}
 
-@router.post("/login", response_model=Token)
+@router.post("/login/", response_model=Token)
 async def login_for_access_token(
     form_data: CreateUserRequest,
     db_session: Session = Depends(get_db)
