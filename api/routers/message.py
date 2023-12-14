@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
-from sql_app.crud import  get_all_personal_posts,send_new_message
+from sql_app.crud import   edit_message, delete_message, get_all_messages,send_new_message
 from sql_app.dependencies.security import has_access
 from sql_app.dependencies.session import get_db
 from sql_app.schemas import Post
@@ -11,13 +11,17 @@ router = APIRouter(
     tags=['message']
 )
 
-@router.get("/get_personal_posts/", response_model= list[Post])
-async def api_get_personal_posts(
+@router.get("/get_all_messages/")
+async def api_get_all_messages(
     session: Session = Depends(get_db),
     id_user: int = Depends(has_access),
 ):
-    personal_posts = get_all_personal_posts(db = session, id_user=id_user)
-
+    personal_posts = get_all_messages(db = session, id_user=id_user)
+    if personal_posts is None:
+        raise HTTPException(
+            status_code=status.HTTP_204_NO_CONTENT,
+            detail="No message"
+        )
     return personal_posts
 
 @router.post("/new_message/")
@@ -43,12 +47,38 @@ async def api_send_new_send(
     
     return {"message: User succesfully send new message"}
 
-# @router.post("/edit_message/")
-# async def api_edit_message(
-#     session: Session = Depends(get_db),
-#     id_user: int = Depends(has_access),
-# ):
-#     personal_posts = get_all_personal_posts(db = session, id_user=id_user)
+@router.post("/edit_message/")
+async def api_edit_message(
+    id_message: int,
+    edit: str,
+    session: Session = Depends(get_db),
+    id_user: int = Depends(has_access),
+):
+    editing = edit_message(db = session,
+                 id_user = id_user,
+                 id_message = id_message,
+                 edit = edit)
+    if editing is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="This message is not yours"
+        )
 
-#     return personal_posts
+    return {"message: User succesfully edit message"}
 
+@router.post("/delete_message/")
+async def api_delete_message(
+    id_message: int,
+    session: Session = Depends(get_db),
+    id_user: int = Depends(has_access),
+):
+    deleting = delete_message(db = session,
+                 id_user = id_user,
+                 id_message = id_message,)
+    if deleting is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="This message is not yours"
+        )
+
+    return {"message: User succesfully delete message"}

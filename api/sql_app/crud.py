@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Session
+from sqlalchemy import or_, func
+from sqlalchemy.orm import joinedload,Session
 from . import models, schemas
 
 def add_commit(db: Session, row):
@@ -35,7 +36,9 @@ def increment_like(db: Session, id_post: int):
     return True
 
 def like_post(db: Session, id_user: int, id_post: int):
-    like = db.query(models.Likes).filter(models.Likes.id_post == id_post, models.Likes.id_user == id_user).first()
+    like = db.query(models.Likes).filter(models.Likes.id_post == id_post,
+                                         models.Likes.id_user == id_user
+                                         ).first()
     if like:
         return None
     else :
@@ -57,7 +60,9 @@ def decrement_like(db: Session, id_post: int):
     return True
 
 def unlike_post(db: Session, id_user: int, id_post: int):
-    like = db.query(models.Likes).filter(models.Likes.id_post == id_post, models.Likes.id_user == id_user).first()
+    like = db.query(models.Likes).filter(models.Likes.id_post == id_post,
+                                         models.Likes.id_user == id_user
+                                         ).first()
     if like is None:
         return None
     else:
@@ -67,15 +72,16 @@ def unlike_post(db: Session, id_user: int, id_post: int):
     db.delete(like)
     db.commit()
     return True
-        
+
 
 def delete_post(db: Session, id_user: int, id_post: int):
-    post = db.query(models.Posts).filter(models.Posts.id_post == id_post, models.Posts.id_user == id_user).first()
+    post = db.query(models.Posts).filter(models.Posts.id_post == id_post,
+                                         models.Posts.id_user == id_user
+                                         ).first()
     if post is None:
         return None
     db.delete(post)
     db.commit()
-    return True
 
 def send_new_message(content: str, db: Session, id_sender: int, id_post: int):
     post = db.query(models.Posts).filter(models.Posts.id_post == id_post).first()
@@ -84,11 +90,57 @@ def send_new_message(content: str, db: Session, id_sender: int, id_post: int):
     id_receiver = post.id_user
     if id_receiver is None:
         return False
-    new_message = models.Message(id_post=id_post, id_sender=id_sender, id_receiver=id_receiver, message_text=content)
-    add_commit(db= db, 
-               row=new_message)
+
+    check_conversation = db.query(models.Message).filter(models.Message.id_post == id_post,
+                                                         models.Message.id_sender == id_sender).first()
+    if check_conversation is None:
+        new_conversation = models.Conversation(id_post=id_post)
+        add_commit(db = db,
+                   row = new_conversation)
+        conversation = new_conversation.id_conversation
+        new_message = models.Message(id_post=id_post,
+                                     id_conversation=conversation,
+                                     id_sender=id_sender,
+                                     id_receiver=id_receiver,
+                                     message_text=content
+                                     )
+        add_commit(db = db,
+                   row = new_message)
+    else :
+        old_conversation = check_conversation.id_conversation
+        new_message = models.Message(id_post=id_post,
+                                     id_conversation=old_conversation,
+                                     id_sender=id_sender,
+                                     id_receiver=id_receiver,
+                                     message_text=content
+                                     )
+        add_commit(db = db,
+                   row = new_message)
     return True
 
-def get_all_personal_posts(db: Session, id_user: int):
-    return db.query(models.Posts).filter(models.Posts.id_user == id_user).order_by(models.Posts.date_insert.desc()).all()
-    
+def get_all_messages(db: Session, id_user: int):
+    all_messages = db.query(models.Conversation
+                            ).options(joinedload(models.Conversation.messages)
+                                      ).join(models.Message, models.Conversation.id_conversation == models.Message.id_conversation
+                                             ).filter(or_(models.Message.id_receiver == id_user, models.Message.id_sender == id_user)
+                                               ).all()
+    return all_messages
+
+
+def edit_message(db: Session, id_user: int, id_message: int, edit: str):
+    message = db.query(models.Message).filter(models.Message.id_message == id_message).first()
+    if message.id_sender == id_user:
+        message.message_text = edit
+        add_commit(db=db,
+                   row=message)
+    else:
+        return None
+
+def delete_message(db: Session, id_user: int, id_message: int):
+    message = db.query(models.Message).filter(models.Message.id_message == id_message).first()
+    if message.id_sender == id_user:
+        db.delete(message)
+        db.commit()
+        return True
+    else:
+        return None

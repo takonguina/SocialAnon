@@ -42,16 +42,29 @@ class Likes(Base):
     class Config:
         orm_mode = True
 
+class Conversation(Base):
+    __tablename__ = "conversations"
+
+    id_conversation = Column(Integer, primary_key=True, index=True)
+    id_post = Column(Integer, ForeignKey("posts.id_post", ondelete="cascade"),nullable=False)
+    messages = relationship('Message', lazy='joined')
+
+
+    class Config:
+        orm_mode = True
+
 class Message(Base):
     __tablename__ = "messages"
 
     id_message =  Column(Integer, primary_key=True, index=True)
+    id_conversation = Column(Integer, ForeignKey("conversations.id_conversation", ondelete="cascade"),nullable=False)
     id_post = Column(Integer, ForeignKey("posts.id_post", ondelete="cascade"),nullable=False)
     id_sender = Column(Integer, ForeignKey("users.id_user", ondelete="cascade"),nullable=False)
     id_receiver = Column(Integer, ForeignKey("users.id_user", ondelete="cascade"),nullable=False)
     message_text = Column(String(1000), nullable=False)
     date_insert = Column(DateTime, nullable=False, default=func.now())
     is_read = Column(Boolean, nullable=False, default=False)
+
 
     class Config:
         orm_mode = True

@@ -36,8 +36,15 @@ CREATE TABLE IF NOT EXISTS likes(
     CONSTRAINT fk_user FOREIGN KEY(id_user) REFERENCES users(id_user)
 );
 
+CREATE TABLE IF NOT EXISTS conversations(
+    id_conversation SERIAL PRIMARY KEY,
+    id_post INT NOT NULL,
+    CONSTRAINT fk_post FOREIGN KEY(id_post) REFERENCES posts(id_post)
+);
+
 CREATE TABLE IF NOT EXISTS messages(
     id_message SERIAL PRIMARY KEY,
+    id_conversation INT NOT NULL,
     id_post INT NOT NULL,
     id_sender INT NOT NULL,
     id_receiver INT NOT NULL,
@@ -46,7 +53,8 @@ CREATE TABLE IF NOT EXISTS messages(
     is_read BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_sender FOREIGN KEY(id_sender) REFERENCES users(id_user),
     CONSTRAINT fk_receiver FOREIGN KEY(id_receiver) REFERENCES users(id_user),
-    CONSTRAINT fk_post FOREIGN KEY(id_post) REFERENCES posts(id_post)
+    CONSTRAINT fk_post FOREIGN KEY(id_post) REFERENCES posts(id_post),
+    CONSTRAINT fk_id_conversation FOREIGN KEY(id_conversation) REFERENCES conversations(id_conversation)
 );
 
 CREATE TABLE IF NOT EXISTS admins(
