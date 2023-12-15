@@ -7,10 +7,14 @@ def add_commit(db: Session, row):
     db.commit()
 
 def create_user(db: Session, user: schemas.CreateUserRequest):
-    db_user = models.Users(email=user.email, password=user.password)
-    add_commit(db=db,
-               row=db_user)
-    return db_user
+    check_email = db.query(models.Users).filter(models.Users.email == user.email).first()
+    if check_email is None:
+        db_user = models.Users(email=user.email, password=user.password)
+        add_commit(db=db,
+                row=db_user)
+        return True
+    else:
+        return None
 
 def get_user_by_id(db: Session, id: int):
     return db.query(models.Users).filter(models.Users.id_user == id).first()

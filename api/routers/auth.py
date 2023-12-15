@@ -33,11 +33,15 @@ async def user_register(
     db_session: Session = Depends(get_db)
 ):
 
-    create_user(
-        db=db_session,
-        user=CreateUserRequest(email=create_user_request.email,
-                                       password=bcrypt_context.hash(create_user_request.password))
-                 )
+    check_user = create_user(db=db_session,
+                             user=CreateUserRequest(email = create_user_request.email,
+                                                    password = bcrypt_context.hash(create_user_request.password))
+                                                    )
+    if check_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_302_FOUND,
+            detail="Email already registered"
+        ) 
     return {"message: User created successfully"}
 
 @router.post("/login/", response_model=Token)

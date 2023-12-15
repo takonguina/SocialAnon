@@ -63,3 +63,4 @@ CREATE TABLE IF NOT EXISTS admins(
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_admin_user FOREIGN KEY(id_user) REFERENCES users(id_user)
 );
+

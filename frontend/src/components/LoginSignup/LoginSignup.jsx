@@ -3,25 +3,37 @@ import axios from 'axios';
 import './LoginSignup.css'
 import email_icon from '../assets/email_icon.png'
 import padlock_icon from '../assets/padlock_icon.png'
+import {useNavigate } from 'react-router-dom';
 
 
 
 const LoginSignup = () => {
 
   const [action, setAction] = useState("Sign Up");
-  const apiUrl = "http://0.0.0.0:3000/auth/register/";
+  const [authToken, setAuthToken] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+  const apiRegisterUrl = "http://0.0.0.0:3000/auth/register/";
+  const apiLoginUrl = "http://0.0.0.0:3000/auth/login/";
+  const navigate = useNavigate();
 
-  const handleLogin = async () => {
+
+  const handleLogin = async (apiUrl) => {
     try {
       const response = await axios.post(`${apiUrl}`, {
         email: email,
         password: password
       });
       console.log('Réponse du serveur:', response.data);
+      if (action === 'Login' && response.status === 200) {
+        setAuthToken(response.data.token);
+        navigate('/home');
+      }
+
     } catch (error) {
       console.error('Erreur de requête:', error.message);
+      
     }
   };
 
@@ -47,7 +59,7 @@ const LoginSignup = () => {
       </div>
       {action==="Sign Up"?<div></div>:<div className="forgot-password">Lost Password? <span>Click here</span></div>
 }
-      <div className="submit" onClick={handleLogin}>Go!</div>
+      <div className="submit" onClick={() =>(action==="Sign Up"?handleLogin(apiRegisterUrl):handleLogin(apiLoginUrl))}>Go!</div>
     </div>
   )
 };
