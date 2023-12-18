@@ -1,22 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import axios from 'axios';
 import './LoginSignup.css'
 import email_icon from '../assets/email_icon.png'
 import padlock_icon from '../assets/padlock_icon.png'
-import {useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../ContextAuth';
 
 
 const LoginSignup = () => {
 
   const [action, setAction] = useState("Sign Up");
-  const [authToken, setAuthToken] = useState(null);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
   const apiRegisterUrl = "http://0.0.0.0:3000/auth/register/";
   const apiLoginUrl = "http://0.0.0.0:3000/auth/login/";
   const navigate = useNavigate();
+  const { authToken, setAuthToken } = useAuth();
 
 
   const handleLogin = async (apiUrl) => {
@@ -25,10 +26,9 @@ const LoginSignup = () => {
         email: email,
         password: password
       });
-      console.log('Réponse du serveur:', response.data);
       if (action === 'Login' && response.status === 200) {
-        setAuthToken(response.data.token);
         navigate('/home');
+        setAuthToken(response.data.access_token);
       }
 
     } catch (error) {
@@ -38,6 +38,7 @@ const LoginSignup = () => {
   };
 
   return (
+
     <div className='container'>
       <div className="header">
       <div className="action-container">
@@ -63,5 +64,6 @@ const LoginSignup = () => {
     </div>
   )
 };
+
 
 export default LoginSignup

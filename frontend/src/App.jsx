@@ -2,8 +2,8 @@
 import './App.css';
 import LoginSignup from './components/LoginSignup/LoginSignup';
 import HomePage from './components/HomePage/HomePage'
-import {NavLink, Outlet, RouterProvider, createBrowserRouter} from "react-router-dom";
-
+import { Outlet, RouterProvider, createBrowserRouter} from "react-router-dom";
+import { AuthContextProvider } from './ContextAuth';
 
 const router = createBrowserRouter([
   {
@@ -30,14 +30,8 @@ const router = createBrowserRouter([
 
 function Root() {
   return <>
-    <header>
-      <nav>
-        <NavLink to ="/home">Home</NavLink>
-        <NavLink to ="/messages">Messages</NavLink>
-      </nav>
-    </header>
     <div>
-      <Outlet/>
+    <Outlet/>
     </div>
   </>
 }
@@ -49,7 +43,9 @@ function PageError() {
 }
 
 function App() {
-  return <RouterProvider router={router}/>
+  return <AuthContextProvider><RouterProvider router={router}/></AuthContextProvider>
+      
+    
 }
 
 export default App;
