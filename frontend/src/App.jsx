@@ -4,17 +4,14 @@ import LoginSignup from './components/LoginSignup/LoginSignup';
 import HomePage from './components/HomePage/HomePage'
 import { Outlet, RouterProvider, createBrowserRouter} from "react-router-dom";
 import { AuthContextProvider } from './ContextAuth';
+import { PrivateRoute } from './PrivateRoute'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root/>,
+    element: <PrivateRoute><Root/></PrivateRoute>,
     errorElement: <PageError/>,
     children : [
-      {
-        path: '/login',
-        element: <div><LoginSignup/></div>
-      },
       {
         path: '/home',
         element: <div><HomePage/></div>
@@ -23,9 +20,12 @@ const router = createBrowserRouter([
         path: '/messages',
         element: <div></div>
       }
-
     ]
-  }
+  },
+  {
+    path: '/login',
+    element: <div><LoginSignup/></div>
+  },
 ]);
 
 function Root() {
