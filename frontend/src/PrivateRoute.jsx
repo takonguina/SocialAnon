@@ -1,11 +1,8 @@
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from './ContextAuth';
-import { useContext } from 'react';
 
 export function PrivateRoute({ children }) {
-    const { authToken } = useContext(AuthContext);
     
-    if (authToken === "") {
+    if (!localStorage.getItem('token')) {
         // not logged in so redirect to login page with the return url
         return <Navigate to="/login"/>
     }
@@ -15,4 +12,3 @@ export function PrivateRoute({ children }) {
 }
 
 export default PrivateRoute;
-

@@ -1,10 +1,10 @@
-
 import './App.css';
 import LoginSignup from './components/LoginSignup/LoginSignup';
 import HomePage from './components/HomePage/HomePage'
 import { Outlet, RouterProvider, createBrowserRouter} from "react-router-dom";
 import { AuthContextProvider } from './ContextAuth';
 import { PrivateRoute } from './PrivateRoute'
+import { NavLink } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
@@ -24,15 +24,21 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <div><LoginSignup/></div>
+    element: <LoginSignup/>
   },
 ]);
 
 function Root() {
   return <>
-    <div>
+  <header>
+    <nav>
+      <NavLink to ="/home">Home</NavLink>
+      <NavLink to ="/messages">Messages</NavLink>
+    </nav>
+  </header>
+  <div>
     <Outlet/>
-    </div>
+  </div>
   </>
 }
 

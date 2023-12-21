@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import './LoginSignup.css'
 import email_icon from '../assets/email_icon.png'
@@ -8,17 +8,14 @@ import { useAuth } from '../../ContextAuth';
 
 
 const LoginSignup = () => {
-
+  const navigate = useNavigate();
   const [action, setAction] = useState("Sign Up");
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
   const apiRegisterUrl = "http://0.0.0.0:3000/auth/register/";
   const apiLoginUrl = "http://0.0.0.0:3000/auth/login/";
-  const navigate = useNavigate();
-  const { authToken, setAuthToken } = useAuth();
-
+  
+  const { setAuthToken } = useAuth();
 
   const handleLogin = async (apiUrl) => {
     try {
@@ -29,6 +26,7 @@ const LoginSignup = () => {
       if (action === 'Login' && response.status === 200) {
         navigate('/home');
         setAuthToken(response.data.access_token);
+        localStorage.setItem('token', response.data.access_token);
       }
 
     } catch (error) {
@@ -36,6 +34,12 @@ const LoginSignup = () => {
       
     }
   };
+  
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   return (
 
