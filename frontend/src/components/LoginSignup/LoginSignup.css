@@ -35,17 +35,19 @@
     margin-top: 45px;
     display: flex;
     flex-direction: column;
-    gap: 25px
+    gap: 25px;
 }
 
 .input{
     display: flex;
     align-items: center;
     margin: auto;
+    margin-bottom: 20px;
     width: 480px;
     height: 80px;
     background: #eaeaea;
     border-radius: 6px;
+    
 }
 
 .input img{
@@ -111,4 +113,8 @@
 .grey{
     background: #eaeaea;
     color: #676767
+}
+
+.error-message{
+    color: red;
 }
