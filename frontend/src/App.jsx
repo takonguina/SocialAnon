@@ -1,10 +1,12 @@
 import './App.css';
 import LoginSignup from './components/LoginSignup/LoginSignup';
+import Settings from './components/Settings/Settings';
 import HomePage from './components/HomePage/HomePage'
 import { Outlet, RouterProvider, createBrowserRouter} from "react-router-dom";
 import { AuthContextProvider } from './ContextAuth';
 import { PrivateRoute } from './PrivateRoute'
-import { NavLink } from 'react-router-dom';
+
+import NavigationBar from './components/NavBar/NavigationBar';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: '/messages',
         element: <div></div>
+      },
+      {
+        path: '/settings',
+        element: <div><Settings/></div>
       }
     ]
   },
@@ -30,12 +36,7 @@ const router = createBrowserRouter([
 
 function Root() {
   return <>
-  <header>
-    <nav>
-      <NavLink to ="/home">Home</NavLink>
-      <NavLink to ="/messages">Messages</NavLink>
-    </nav>
-  </header>
+  <NavigationBar/>
   <div>
     <Outlet/>
   </div>

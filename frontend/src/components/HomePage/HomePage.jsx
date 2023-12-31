@@ -1,17 +1,14 @@
-import axios from 'axios';
 import './HomePage.css'
-import { AuthContext } from '../../ContextAuth';
-import { useContext } from 'react';
+import { InputPost } from './inputPost.jsx';
+import { TimeLine } from './timeLine.jsx'
 
 const Homepage = () => {
-  const { authToken } = useContext(AuthContext);
 
-  return (<>
-
-  <div className="div">
-    <h1></h1>
-  </div>
-</>
+  return (
+    <>
+    <InputPost />
+    <TimeLine/>
+    </>
 );
 
 };
