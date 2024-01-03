@@ -18,10 +18,10 @@ Exchange private messages confidentially without revealing your identity.
 
 ## Technologies Used
 Backend: FastAPI
-Frontend: React
+Frontend: React JS
 
 ## Installation
-Clone the repository: git clone https://github.com/yourusername/SocialAnon.git
+Clone the repository: git clone https://github.com/takonguina/SocialAnon.git
 Install dependencies: npm install
 Launch the application: npm start
 

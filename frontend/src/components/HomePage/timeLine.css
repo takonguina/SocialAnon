@@ -1,0 +1,22 @@
+div.timeline-container {
+    max-width: 800px;
+    margin: auto;
+  }
+  
+
+  div.timeline-post {
+    border: 1px solid #ddd;
+    padding: 16px; 
+    margin-bottom: 16px;
+  }
+  
+
+  div.timeline-post p {
+    margin: 0;
+  }
+  
+
+  div.timeline-post .post-meta {
+    color: #888;
+    font-size: 0.8em;
+  }
