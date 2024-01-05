@@ -25,5 +25,6 @@ class Post(BaseModel):
     content: str
     likes_post: int
     date_insert: datetime
+    liked: bool
     class Config:
         orm_mode = True

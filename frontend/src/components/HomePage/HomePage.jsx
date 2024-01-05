@@ -1,6 +1,6 @@
 import './HomePage.css'
 import { InputPost } from './inputPost.jsx';
-import { TimeLine } from './timeLine.jsx'
+import { TimeLine } from './timeLine.jsx';
 
 const Homepage = () => {
 

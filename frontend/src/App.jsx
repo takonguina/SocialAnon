@@ -5,7 +5,7 @@ import HomePage from './components/HomePage/HomePage'
 import { Outlet, RouterProvider, createBrowserRouter} from "react-router-dom";
 import { AuthContextProvider } from './ContextAuth';
 import { PrivateRoute } from './PrivateRoute'
-
+import Footer from './components/Footer/Footer'
 import NavigationBar from './components/NavBar/NavigationBar';
 
 const router = createBrowserRouter([
@@ -40,6 +40,7 @@ function Root() {
   <div>
     <Outlet/>
   </div>
+  <Footer/>
   </>
 }
 

@@ -22,6 +22,7 @@ Frontend: React JS
 
 ## Installation
 Clone the repository: git clone https://github.com/takonguina/SocialAnon.git
+
 Install dependencies: npm install
 Launch the application: npm start
 

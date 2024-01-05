@@ -24,9 +24,9 @@ async def insert_new_post(
 @router.get("/get_recent_posts/", response_model=list[Post])
 async def get_recent_posts(
     session: Session = Depends(get_db),
-    _: int = Depends(has_access)
+    id_user: int = Depends(has_access)
 ):
-    recent_posts = get_post_by_date_insert(db=session)
+    recent_posts = get_post_by_date_insert(db=session, id_user=id_user)
     return recent_posts
 
 @router.post("/like_post/")

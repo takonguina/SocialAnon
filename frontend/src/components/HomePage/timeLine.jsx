@@ -1,11 +1,20 @@
 import axios from 'axios';
 import { AuthContext } from '../../ContextAuth';
 import { useContext, useState, useEffect, useCallback } from 'react';
+import { Toaster, toast } from 'sonner';
 import './timeLine.css';
+import { PostPopup } from './postPopup.jsx';
+import { formatDate } from '../Tools.js';
+import { createPortal } from "react-dom";
+import { IoHeart } from "react-icons/io5";
+import { IoIosHeartEmpty } from "react-icons/io";
+import { LuMessageSquare } from "react-icons/lu";
 
 export const TimeLine = () => {
   const { authToken, setAuthToken } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const fetchRecentPosts = useCallback(async () => {
     try {
@@ -23,20 +32,63 @@ export const TimeLine = () => {
     }
   }, [authToken]);
 
-  const formatDate = (dateString) => {
-    const currentDate = new Date();
-    const postDate = new Date(dateString);
-  
-    const timeDifference = (currentDate - postDate) / (1000 * 60);
-  
-    if (timeDifference < 60) {
-      return `${Math.floor(timeDifference)} minutes ago`;
-    } else if (timeDifference < 1440) {
-      return `${Math.floor(timeDifference / 60)} hours ago`;
-    } else {
-      return `${Math.floor(timeDifference / 1440)} days ago`;
+  const handleUnlike = async (postId) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/content/unlike_post/',
+        null,
+        {
+            params: { id_post: postId },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authToken}`,
+            },
+        }
+    );
+
+    if (response.status === 200){
+        return toast.success('Post unliked')
+      }
+    } catch (error) {
+      if (error.response?.status === 404){
+        return toast.error('The post no longer exists')
+      }  else {
+        return toast.error('An unexpected error has occurred.')
+      }
     }
   };
+
+  const handleLike = async (postId) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/content/like_post/',
+        null,
+        {
+            params: { id_post: postId },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authToken}`,
+            },
+        }
+    );
+
+    if (response.status === 200){
+        return toast.success('Post liked')
+      } else if (response.status === 208){
+        handleUnlike(postId)
+      }
+    } catch (error) {
+      if (error.response?.status === 404){
+        return toast.error('The post no longer exists')
+      } else {
+        return toast.error('An unexpected error has occurred.')
+      }
+    }
+  };
+
+  const handleButtonClick = () =>{
+    setModalOpen(false)
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -46,31 +98,23 @@ export const TimeLine = () => {
     }
   }, [setAuthToken, fetchRecentPosts]);
 
-  const handleLike = async (postId) => {
-    try {
-      console.log(`Liked post with ID ${postId}`);
-    } catch (error) {
-      console.error('Échec de la requête de like', error);
-    }
-  };
-  
-  const handleReply = (postId) => {
-    console.log(`Replying to post with ID ${postId}`);
-  };
-
   return (
     <div className="timeline-container">
-    <h1>TimeLine</h1>
-    {posts.map((post) => (
-      <div key={post.id_post} className="timeline-post">
-        <p>{post.content}</p>
-        <div className="post-meta">
-          <p>{formatDate(post.date_insert)} - Likes : {post.likes_post}</p>
-          <button onClick={() => handleLike(post.id_post)}>Like</button>
-          <button onClick={() => handleReply(post.id_post)}>Answer</button>
+      {modalOpen && createPortal(<PostPopup selectedPost={selectedPost} onClose={handleButtonClick}/>, document.body)}
+      {posts.map((post) => (
+        <div key={post.id_post} className="timeline-post">
+          <p>{post.content}</p>
+            <div className="button-container">
+              {post.liked ? (
+              <IoHeart size={30} onClick={() => handleLike(post.id_post)} className="like-button" />) : (<IoIosHeartEmpty size={30} onClick={() => handleLike(post.id_post)} className="like-button" />)}<p className='nb-likes'>{post.likes_post}</p>
+              <Toaster richColors position="top-center" />
+              <LuMessageSquare size={30} onClick={() => {setSelectedPost(post); setModalOpen(true);}} className="answer-button" />
+              <p className='date'>{formatDate(post.date_insert)}</p>
+            </div>
         </div>
-      </div>
-    ))}
-  </div>
+      ))}
+      
+    </div>
 );
 };
+
