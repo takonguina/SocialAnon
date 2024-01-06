@@ -7,6 +7,7 @@ import { AuthContextProvider } from './ContextAuth';
 import { PrivateRoute } from './PrivateRoute'
 import Footer from './components/Footer/Footer'
 import NavigationBar from './components/NavBar/NavigationBar';
+import { Message } from './components/Message/message';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/messages',
-        element: <div></div>
+        element: <div><Message/></div>
       },
       {
         path: '/settings',

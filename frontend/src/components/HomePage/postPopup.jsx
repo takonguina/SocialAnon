@@ -7,14 +7,13 @@ import './postPopup.css';
 
 
 export const PostPopup = ({onClose, selectedPost}) => {
-
+    
+    const { authToken } = useContext(AuthContext);
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (change) => {
         setInputValue(change.target.value);
     }
-
-    const { authToken } = useContext(AuthContext);
 
     const handleReply = async (postId) => {
         try {
