@@ -47,6 +47,7 @@ export const TimeLine = () => {
     );
 
     if (response.status === 200){
+      handleLikeRealTime(postId=postId)
         return toast.success('Post unliked')
       }
     } catch (error) {
@@ -73,6 +74,7 @@ export const TimeLine = () => {
     );
 
     if (response.status === 200){
+      handleLikeRealTime(postId=postId)
         return toast.success('Post liked')
       } else if (response.status === 208){
         handleUnlike(postId)
@@ -85,6 +87,13 @@ export const TimeLine = () => {
       }
     }
   };
+
+  const handleLikeRealTime= (postId) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id_post === postId ? { ...post, liked: !post.liked, likes_post: post.liked ? post.likes_post - 1 : post.likes_post + 1 } : post 
+      )
+    )};
 
   const handleButtonClick = () =>{
     setModalOpen(false)

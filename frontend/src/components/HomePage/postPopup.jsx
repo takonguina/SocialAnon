@@ -1,12 +1,47 @@
-import React from 'react';
+import { AuthContext } from '../../ContextAuth';
+import axios from "axios";
 import { formatDate } from '../Tools.js';
+import React, { useState, useContext } from 'react';
+import { Toaster, toast } from 'sonner';
 import './postPopup.css';
+
 
 export const PostPopup = ({onClose, selectedPost}) => {
 
-    const handleReply = (postId) => {
-        console.log(`Replying to post with ID ${postId}`);
-      };
+    const [inputValue, setInputValue] = useState('');
+
+    const handleInputChange = (change) => {
+        setInputValue(change.target.value);
+    }
+
+    const { authToken } = useContext(AuthContext);
+
+    const handleReply = async (postId) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/message/new_message/?content=${encodeURIComponent(inputValue)}&id_post=${postId}`,
+                null,
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            if (response.status === 200){
+                onClose()
+                return toast.success('New message sent')
+              }
+      } catch (error) {
+        if (error.response?.status === 404){
+            return toast.error('Post or user no longer exists')
+          }  else {
+            return toast.error('An unexpected error has occurred.')
+          }
+      }
+    
+    };
 
     return(
         <div 
@@ -22,10 +57,15 @@ export const PostPopup = ({onClose, selectedPost}) => {
                     <p className='details'>{selectedPost.likes_post} likes - {formatDate(selectedPost.date_insert)}</p>
                 </div>
                 <div className="modal-footer">
-                    <input></input>
+                    <input 
+                    className="inpuit"
+                    value={inputValue}
+                    placeholder="Reply"
+                    onChange={handleInputChange}></input>
                     <div className="button-container">
                     <button className="btn-cancel" onClick={()=>onClose()}>Cancel</button>
-                    <button className="btn-submit">Send</button>
+                    <button className="btn-submit" onClick={()=>handleReply(selectedPost.id_post)}>Send</button>
+                    <Toaster richColors position="top-center"/>
                     </div>
                 </div>
             </div>
