@@ -28,18 +28,18 @@ CREATE TABLE IF NOT EXISTS posts(
     CONSTRAINT fk_user FOREIGN KEY(id_user) REFERENCES users(id_user)
 );
 
+CREATE TABLE IF NOT EXISTS conversations(
+    id_conversation SERIAL PRIMARY KEY,
+    id_post INT NOT NULL,
+    CONSTRAINT fk_post FOREIGN KEY(id_post) REFERENCES posts(id_post)
+);
+
 CREATE TABLE IF NOT EXISTS likes(
     id_like SERIAL PRIMARY KEY,
     id_post INT NOT NULL,
     id_user INT NOT NULL,
     CONSTRAINT fk_post FOREIGN KEY(id_post) REFERENCES posts(id_post),
     CONSTRAINT fk_user FOREIGN KEY(id_user) REFERENCES users(id_user)
-);
-
-CREATE TABLE IF NOT EXISTS conversations(
-    id_conversation SERIAL PRIMARY KEY,
-    id_post INT NOT NULL,
-    CONSTRAINT fk_post FOREIGN KEY(id_post) REFERENCES posts(id_post)
 );
 
 CREATE TABLE IF NOT EXISTS messages(

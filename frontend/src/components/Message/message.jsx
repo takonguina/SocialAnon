@@ -25,7 +25,7 @@ export const Message = () => {
 
     useEffect(() => {
           handleMessage();
-      }, [handleMessage]);
+      }, []);
 
     return (
         <>

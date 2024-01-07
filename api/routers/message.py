@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from sql_app.crud import   edit_message, delete_message, get_all_messages,send_new_message
 from sql_app.dependencies.security import has_access
 from sql_app.dependencies.session import get_db
-from sql_app.schemas import Post
 
 router = APIRouter(
     prefix='/message',
@@ -43,6 +42,12 @@ async def api_send_new_send(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="The user no longer exists"
+        )
+    
+    if new_message == 0:
+        raise HTTPException(
+            status_code=status.HTTP_303_SEE_OTHER,
+            detail="This is yout post"
         )
     
     return {"message: User succesfully send new message"}

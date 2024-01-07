@@ -93,11 +93,15 @@ def delete_post(db: Session, id_user: int, id_post: int):
 
 def send_new_message(content: str, db: Session, id_sender: int, id_post: int):
     post = db.query(models.Posts).filter(models.Posts.id_post == id_post).first()
+    
+    id_receiver = post.id_user
+
     if post is None:
         return None
-    id_receiver = post.id_user
     if id_receiver is None:
         return False
+    if id_receiver == id_sender:
+        return 0
 
     check_conversation = db.query(models.Message).filter(models.Message.id_post == id_post,
                                                          models.Message.id_sender == id_sender).first()

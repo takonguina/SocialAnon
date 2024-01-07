@@ -45,10 +45,10 @@ class Likes(Base):
 class Conversation(Base):
     __tablename__ = "conversations"
 
+    post = relationship('Posts', lazy='joined')
     id_conversation = Column(Integer, primary_key=True, index=True)
     id_post = Column(Integer, ForeignKey("posts.id_post", ondelete="cascade"),nullable=False)
     messages = relationship('Message', lazy='joined')
-
 
     class Config:
         orm_mode = True

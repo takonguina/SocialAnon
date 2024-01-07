@@ -35,7 +35,9 @@ export const PostPopup = ({onClose, selectedPost}) => {
       } catch (error) {
         if (error.response?.status === 404){
             return toast.error('Post or user no longer exists')
-          }  else {
+          }  else if (error.response?.status === 303){
+            return toast.error('This is your post.')
+          } else {
             return toast.error('An unexpected error has occurred.')
           }
       }
